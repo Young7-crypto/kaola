@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>火影忍者估价器</title>
+    <style>
+        body {
+            font-family: '微软雅黑', Arial, sans-serif;
+            background: #f5f6fa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 32px 36px 28px 36px;
+            border-radius: 14px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            text-align: center;
+            min-width: 440px;
+            max-width: 600px;
+            border: 1.5px solid #e0e3ea;
+        }
+        h1 {
+            margin-bottom: 12px;
+            color: #222;
+            font-size: 2rem;
+            letter-spacing: 2px;
+        }
+        .platforms {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 32px;
+            justify-content: center;
+            margin-bottom: 24px;
+            margin-top: 8px;
+            padding: 12px 0 8px 0;
+            border-radius: 8px;
+            border: 1px solid #e0e3ea;
+            background: #f8fafd;
+        }
+        .platform-label {
+            font-size: 17px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .input-group {
+            margin-bottom: 22px;
+            padding: 18px 0 10px 0;
+            border-radius: 8px;
+            border: 1px solid #e0e3ea;
+            background: #f8fafd;
+        }
+        label {
+            font-size: 18px;
+            color: #333;
+            display: block;
+            margin-bottom: 8px;
+            text-align: left;
+        }
+        input[type="number"] {
+            padding: 10px;
+            font-size: 18px;
+            border: 1.5px solid #bfc8d8;
+            border-radius: 6px;
+            width: 220px;
+            margin-top: 8px;
+            margin-bottom: 18px;
+            background: #fff;
+            transition: border 0.2s, box-shadow 0.2s;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+        input[type="number"]:focus {
+            outline: none;
+            border: 1.5px solid #667eea;
+            box-shadow: 0 2px 8px rgba(102,126,234,0.12);
+        }
+        .addons {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 16px 18px 10px 18px;
+            border-radius: 8px;
+            border: 1px solid #e0e3ea;
+            background: #f8fafd;
+        }
+        .addon-label {
+            display: flex;
+            align-items: center;
+            font-size: 17px;
+            color: #222;
+            min-width: 180px;
+            user-select: none;
+            font-weight: 500;
+        }
+        .addon-label input {
+            margin-right: 10px;
+            transform: scale(1.15);
+        }
+        .result {
+            margin-top: 18px;
+            font-size: 22px;
+            color: #0077ff;
+            min-height: 32px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            padding: 10px 0 6px 0;
+        }
+        #multiplierBox {
+            display: none;
+            align-items: center;
+            gap: 6px;
+            margin: 12px 0 0 0;
+            justify-content: center;
+            width: 100%;
+            padding: 10px 0 0 0;
+        }
+        #multiplier {
+            width: 70px;
+            padding: 4px 8px;
+            font-size: 16px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            background: #fff;
+            transition: border 0.2s;
+        }
+        #multiplier:focus {
+            border-color: #667eea;
+        }
+        .tips {
+            margin-top: 32px;
+            font-size: 15px;
+            color: #b04a00;
+            text-align: left;
+            line-height: 1.7;
+            background: #fffbe6;
+            border-radius: 6px;
+            padding: 12px 18px 10px 18px;
+            box-shadow: 0 2px 8px rgba(255,200,100,0.07);
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid #ffe0a3;
+        }
+        .back-link {
+            display: inline-block;
+            margin-top: 28px;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 16px;
+            transition: color 0.2s;
+        }
+        .back-link:hover {
+            color: #764ba2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>火影忍者估价器</h1>
+        <div class="platforms" style="display: flex; flex-direction: row; align-items: center; gap: 32px; justify-content: center; margin-bottom: 24px; margin-top: 8px;">
+            <label class="platform-label" style="font-size: 17px;"><input type="checkbox" id="androidAccount">安卓账号</label>
+            <label class="platform-label" style="font-size: 17px;"><input type="checkbox" id="iosAccount">苹果账号</label>
+        </div>
+        <div class="platforms" id="realnameBox" style="display: flex; flex-direction: row; align-items: center; gap: 18px; justify-content: center; margin-bottom: 18px; margin-top: -10px; padding: 10px 0 8px 0; border-radius: 8px; border: 1px solid #e0e3ea; background: #f8fafd; min-width: 0; max-width: 100%;">
+            <span class="platform-label" style="font-size: 16px;">有无二次实名：</span>
+            <label class="platform-label" style="font-size: 16px;"><input type="radio" name="realname" id="realname_yes" value="yes" checked>有</label>
+            <label class="platform-label" style="font-size: 16px;"><input type="radio" name="realname" id="realname_no" value="no">无</label>
+        </div>
+        <div class="input-group">
+            <label for="s忍">氪金S忍数量</label>
+            <input type="number" id="s忍" min="0" value="0" placeholder="请输入S忍数量">
+            <label for="a忍">氪金A忍数量</label>
+            <input type="number" id="a忍" min="0" value="0" placeholder="请输入A忍数量">
+        </div>
+        <div class="addons" style="display: flex; flex-direction: column; align-items: flex-start; gap: 10px; margin-bottom: 10px;">
+            <label class="addon-label"><input type="checkbox" class="addon" value="50">宇智波斑【白面具】（+50元）</label>
+            <label class="addon-label"><input type="checkbox" class="addon" value="50">佩恩天道【超】（+50元）</label>
+            <label class="addon-label"><input type="checkbox" class="addon" value="50">药师兜【仙人模式】（+50元）</label>
+        </div>
+        <div class="result" id="result"></div>
+        <span id="multiplierBox" style="display:none; align-items: center; gap: 6px; margin: 12px 0 0 0; justify-content: center; width: 100%;">
+            <label for="multiplier" style="margin:0 4px 0 0; font-size:16px; color:#333;">加价倍数</label>
+            <input type="number" id="multiplier" min="0" step="0.1" value="1" style="width:70px; padding:4px 8px; font-size:16px; border-radius:4px; border:1px solid #ccc;">
+        </span>
+        <div class="tips">
+            <div>1. 仅统计氪金S忍和A忍，普通/免费获得的忍者不计入估价。</div>
+            <div>2. 估价仅供参考，具体以实际账号情况为准，酌情增加或减少报价。
+            </div>
+        </div>
+        <a href="navigation.html" class="back-link">返回导航</a>
+    </div>
+    <script>
+        const sInput = document.getElementById('s忍');
+        const aInput = document.getElementById('a忍');
+        const resultDiv = document.getElementById('result');
+        function updateResult() {
+            const s = parseInt(sInput.value) || 0;
+            const a = parseInt(aInput.value) || 0;
+            const total = s * 50 + a * 30;
+            const addons = document.querySelectorAll('.addon:checked');
+            let addonSum = 0;
+            addons.forEach(cb => { addonSum += parseFloat(cb.value); });
+            let result = total + addonSum;
+            const iosChecked = document.getElementById('iosAccount').checked;
+            let multiplier = 1;
+            if (iosChecked) {
+                const multiplierInput = document.getElementById('multiplier');
+                multiplier = parseFloat(multiplierInput.value) || 1;
+                result = result * multiplier;
+            }
+            const realnameNo = document.getElementById('realname_no').checked;
+            if (realnameNo) {
+                result = result * 0.9;
+            }
+            resultDiv.textContent = `当前估价：￥${result.toFixed(2)} 元`;
+        }
+        document.getElementById('iosAccount').addEventListener('change', function() {
+            const multiplierBox = document.getElementById('multiplierBox');
+            if (this.checked) {
+                multiplierBox.style.display = 'inline-flex';
+                document.getElementById('androidAccount').checked = false;
+            } else {
+                multiplierBox.style.display = 'none';
+            }
+            updateResult();
+        });
+        document.getElementById('androidAccount').addEventListener('change', function() {
+            if (this.checked) {
+                document.getElementById('iosAccount').checked = false;
+                document.getElementById('multiplierBox').style.display = 'none';
+            }
+            updateResult();
+        });
+        document.getElementById('multiplier').addEventListener('input', updateResult);
+        sInput.addEventListener('input', updateResult);
+        aInput.addEventListener('input', updateResult);
+        document.querySelectorAll('.addon').forEach(cb => {
+            cb.addEventListener('change', updateResult);
+        });
+        document.getElementById('realname_yes').addEventListener('change', updateResult);
+        document.getElementById('realname_no').addEventListener('change', updateResult);
+        updateResult();
+    </script>
+</body>
+</html> 
